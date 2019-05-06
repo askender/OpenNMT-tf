@@ -95,7 +95,7 @@ class Inputter(tf.keras.layers.Layer):
     Returns:
       A ``tf.data.Dataset``.
     """
-    map_func = lambda *arg: self.make_features(item_or_tuple(arg), training=False)
+    map_func = lambda *arg: self.process(item_or_tuple(arg), training=False)
     dataset = self.make_dataset(features_file, training=False)
     dataset = inference_pipeline(
         dataset,
@@ -603,7 +603,7 @@ class ExampleInputter(ParallelInputter):
     Returns:
       A ``tf.data.Dataset``.
     """
-    map_func = lambda *arg: self.make_features(arg, training=False)
+    map_func = lambda *arg: self.process(arg, training=False)
     dataset = self.make_dataset([features_file, labels_file], training=False)
     dataset = inference_pipeline(
         dataset,
@@ -668,7 +668,7 @@ class ExampleInputter(ParallelInputter):
       A ``tf.data.Dataset``.
     """
     dataset_size = self.features_inputter.get_dataset_size(features_file)
-    map_func = lambda *arg: self.make_features(arg, training=True)
+    map_func = lambda *arg: self.process(arg, training=True)
     dataset = self.make_dataset([features_file, labels_file], training=True)
     dataset = training_pipeline(
         dataset,
